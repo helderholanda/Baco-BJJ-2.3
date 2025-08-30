@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Baco BJJ</title>
+
+  <!-- Manifest e tema -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0b3d0b" />
+
+  <!-- Ícone/Favicon -->
+  <link rel="icon" type="image/png" href="logo.png" />
+
+  <!-- Fontes Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Baskervville+SC:wght@400..700&family=Diplomata+SC&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Libs PDF e QRCode -->
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="Baco BJJ" />
+  <meta property="og:description" content="Escola de Jiu-Jitsu em Porto Murtinho - MS" />
+  <meta property="og:image" content="https://helderholanda.github.io/Baco-BJJ-2.1/logo.png" />
+  <meta property="og:url" content="https://helderholanda.github.io/Baco-BJJ-2.1/" />
+  <meta property="og:type" content="website" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Baco BJJ" />
+  <meta name="twitter:description" content="Escola de Jiu-Jitsu em Porto Murtinho - MS" />
+  <meta name="twitter:image" content="https://helderholanda.github.io/Baco-BJJ-2.1/logo.png" />
+
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+  <section id="tela-login" class="tela ativa">
+    <div class="logo-container">
+      <img src="logo.png" alt="Logo Baco BJJ" class="logo-grande" />
+    </div>
+    <h1>Login</h1>
+    <form>
+      <input type="text" id="usuario" placeholder="Usuário" />
+      <input type="password" id="senha" placeholder="Senha" />
+      <button type="button" id="btnLogin">Entrar</button>
+      <button type="button" id="btnVisitante">Entrar como Visitante</button>
+    </form>
+  </section>
+
+  <!-- INICIAL LOGADO -->
+  <section id="tela-inicial-logado" class="tela">
+    <h1>Bem-vindo ao Baco BJJ</h1>
+    <div class="menu">
+      <button onclick="mostrarTela('menuChamada')">Chamada</button>
+      <button id="btnMenuAlunos" onclick="mostrarTela('menuAlunos')">Alunos</button>
+      <button onclick="enviarSugestao()">Sugestões</button>
+      <button id="btnInstalarApp">Instalar App</button>
+      <button id="btnDownloadJSON" onclick="downloadAlunosJSON()">Download JSON</button>
+    </div>
+  </section>
+
+  <!-- INICIAL VISITANTE -->
+  <section id="tela-inicial-visitante" class="tela">
+    <h1>Bem-vindo ao Baco, OSS</h1>
+
+    <!-- FOTO DA EQUIPE -->
+    <img src="equipe1.jpg" alt="Equipe Baco BJJ" class="foto-equipe" />
+
+    <!-- BOTÕES -->
+    <div class="menu">
+      <button onclick="mostrarTela('quemSomos')">Quem Somos</button>
+      <button onclick="window.open('https://instagram.com/bacobjj_','_blank')">Instagram</button>
+    </div>
+
+    <!-- MAPA GOOGLE -->
+    <div class="mapa-container">
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3707.1791504890093!2d-57.8793712262746!3d-21.695766395712806!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x947aefcc09696785%3A0x9613fa29645ecdc5!2sBaco%20Bjj!5e0!3m2!1sen!2sbr!4v1756576660558!5m2!1sen!2sbr" 
+        width="100%" 
+        height="350" 
+        style="border:0; border-radius:12px; margin-top:15px;" 
+        allowfullscreen="" 
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </section>
+
+  <!-- QUEM SOMOS -->
+  <section id="quemSomos" class="tela">
+    <h1>Quem Somos</h1>
+    <p>Somos uma escola de Jiu-Jitsu independente, dedicada ao desenvolvimento pessoal de cada aluno, especialmente os mais jovens. Nosso objetivo vai além do tatame: oferecemos orientação, disciplina e acompanhamento, ajudando-os a aproveitar seu tempo de forma positiva e construtiva.
+
+Cada lição de Jiu-Jitsu se torna um aprendizado para a vida. O que nossos alunos aprendem nos treinos, eles levam para todas as situações, fortalecendo respeito, confiança e responsabilidade. Além disso, apoiamos nossos alunos nos estudos, garantindo um acompanhamento completo em seu crescimento pessoal e acadêmico.</p>
+    <button onclick="voltarInicio()">Voltar</button>
+  </section>
+
+  <!-- MENU CHAMADA -->
+  <section id="menuChamada" class="tela">
+    <h1>Chamada</h1>
+    <form>
+      <div class="menu">
+        <button type="button" onclick="abrirChamada('Iniciantes')">Iniciantes</button>
+        <button type="button" onclick="abrirChamada('Intermediarios')">Intermediários</button>
+        <button type="button" onclick="abrirChamada('Graduados')">Graduados</button>
+      </div>
+      <button type="button" onclick="voltarInicio()">Voltar</button>
+    </form>
+  </section>
+
+  <!-- TELA CHAMADA -->
+  <section id="chamada" class="tela">
+    <h1 id="tituloChamada">Registro de Presença</h1>
+    <ul id="lista-alunos"></ul>
+    <h2>Relatório</h2>
+    <textarea id="texto-relatorio" placeholder="Digite observações..."></textarea>
+    <button id="salvarChamada">Salvar e Enviar por E-mail</button>
+    <button onclick="voltarInicio()">Voltar</button>
+  </section>
+
+  <!-- MENU ALUNOS -->
+  <section id="menuAlunos" class="tela">
+    <h1>Alunos</h1>
+    <div class="menu">
+      <button id="btnNovoAluno" onclick="mostrarTela('novoAluno')">Novo Aluno</button>
+      <button id="btnPesquisarAluno" onclick="mostrarTela('pesquisarAluno')">Pesquisar / Editar</button>
+      <button onclick="gerarRelatorioAlocadosPDF()">Relatório Alocados</button>
+      <button onclick="gerarRelatorioGeralPDF()">Relatório Geral</button>
+      <button onclick="voltarInicio()">Voltar</button>
+    </div>
+  </section>
+
+  <!-- CADASTRO / EDIÇÃO -->
+  <section id="novoAluno" class="tela">
+    <h1>Cadastro / Edição de Aluno</h1>
+    <form>
+      <input type="text" id="alunoNome" placeholder="Nome completo" />
+      <input type="text" id="responsavel" placeholder="Responsável" />
+      <input type="date" id="dataNascimento" placeholder="Data de nascimento" />
+      <input type="text" id="telefone" placeholder="Telefone" />
+      <input type="text" id="telefoneResponsavel" placeholder="Telefone do responsável" />
+      <input type="email" id="email" placeholder="E-mail" />
+      <select id="turma">
+        <option value="">Selecione a turma</option>
+        <option value="Iniciantes">Iniciantes</option>
+        <option value="Intermediarios">Intermediários</option>
+        <option value="Graduados">Graduados</option>
+      </select>
+      <div class="linha-grad">
+        <select id="graduacao"></select>
+        <span id="badgeFaixa" class="badge-faixa">Faixa</span>
+      </div>
+      <select id="grau">
+        <option value="0">Grau 0</option>
+        <option value="1">Grau 1</option>
+        <option value="2">Grau 2</option>
+        <option value="3">Grau 3</option>
+        <option value="4">Grau 4</option>
+      </select>
+      <div class="menu">
+        <button type="button" id="btnSalvarAluno">Salvar</button>
+        <button type="button" id="btnCancelarEdicao" onclick="cancelarEdicao()">Cancelar Edição</button>
+        <button type="button" onclick="mostrarTela('menuAlunos')">Voltar</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- PESQUISA / EDIÇÃO -->
+  <section id="pesquisarAluno" class="tela">
+    <h1>Pesquisar / Editar</h1>
+    <div class="menu">
+      <input type="text" id="buscarAluno" placeholder="Digite o nome do aluno" />
+      <button type="button" id="btnExecutarPesquisa">Pesquisar</button>
+    </div>
+    <ul id="lista-pesquisa"></ul>
+    <div id="detalhes-aluno"></div>
+    <button onclick="mostrarTela('menuAlunos')">Voltar</button>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Baco BJJ — By Helder Holanda</p>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script src="script.js" defer></script>
+
+</body>
+</html>
