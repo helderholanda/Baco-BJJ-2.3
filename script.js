@@ -64,6 +64,10 @@ function rebuildTurmas(){
   alunos.forEach(a=>{
     if(a.turma && turmas[a.turma]) turmas[a.turma].push(a);
   });
+  // Ordenar cada turma
+  Object.keys(turmas).forEach(t=>{
+    turmas[t].sort((a,b)=>a.nome.localeCompare(b.nome));
+  });
 }
 
 async function carregarAlunosInicial(){
@@ -73,6 +77,8 @@ async function carregarAlunosInicial(){
       const data = await resp.json();
       if(Array.isArray(data)){
         alunos = data.map(normalizarAluno);
+        // Ordenar alfabeticamente
+        alunos.sort((a,b)=>a.nome.localeCompare(b.nome));
         localStorage.setItem("alunos", JSON.stringify(alunos));
         rebuildTurmas();
         return;
@@ -86,6 +92,7 @@ async function carregarAlunosInicial(){
   const localData = JSON.parse(localStorage.getItem("alunos") || "[]");
   if(localData.length > 0){
     alunos = localData.map(normalizarAluno);
+    alunos.sort((a,b)=>a.nome.localeCompare(b.nome));
     rebuildTurmas();
   }
 }
@@ -254,6 +261,9 @@ function salvarAluno(){
     document.getElementById("btnCancelarEdicao").style.display="none";
   } else alunos.push(alunoObj);
 
+  // Ordenar alfabeticamente
+  alunos.sort((a,b)=>a.nome.localeCompare(b.nome));
+
   localStorage.setItem("alunos", JSON.stringify(alunos));
   rebuildTurmas();
   mostrarTela("menuAlunos");
@@ -289,6 +299,8 @@ function pesquisarAluno(){
   const lista = document.getElementById("lista-pesquisa");
   lista.innerHTML = "";
   const resultados = alunos.filter(a=>a.nome.toLowerCase().includes(busca));
+  // Ordenar resultados
+  resultados.sort((a,b)=>a.nome.localeCompare(b.nome));
   resultados.forEach(a=>{
     const li = document.createElement("li");
     li.innerHTML = `<span>${a.nome} (${a.turma} - ${a.graduacao})</span> 
@@ -384,7 +396,6 @@ function enviarChamadaEmail(){
   limparChamadaUI();
   voltarInicio();
 }
-
 
 // ====== INSTALL APP ======
 window.addEventListener('beforeinstallprompt', (e) => {
