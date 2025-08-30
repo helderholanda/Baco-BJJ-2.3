@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Galeria Baco BJJ</title>
+
+  <!-- Fontes Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Baskervville+SC:wght@400..700&family=Diplomata+SC&display=swap" rel="stylesheet">
+
+  <!-- Estilo principal adaptado -->
+  <style>
+    /* ====== RESET ====== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ====== CORPO ====== */
+    body {
+      font-family: 'Baskervville SC', serif;
+      background: #0b3d0b;
+      color: #fff;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    /* ====== TÍTULOS ====== */
+    h1 { 
+      font-family: 'Diplomata SC', cursive;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* ====== GALERIA ====== */
+    #galeria-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    #galeria-container img {
+      width: 200px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      border: 2px solid #222;
+    }
+
+    #galeria-container img:hover {
+      transform: scale(1.05);
+      border-color: #ff0000;
+    }
+
+    /* ====== BOTÃO VOLTAR ====== */
+    button {
+      display: block;
+      margin: 20px auto 0;
+      padding: 16px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      background: #000;
+      color: #ff0000;
+      cursor: pointer;
+      width: 90%;
+      max-width: 350px;
+      transition: background 0.2s ease;
+      font-family: 'Baskervville SC', serif;
+    }
+
+    button:hover { background: #222; }
+
+    /* ====== LIGHTBOX ====== */
+    #lightbox {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    #lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .nav {
+      position: absolute;
+      top: 50%;
+      font-size: 3rem;
+      color: #fff;
+      cursor: pointer;
+      user-select: none;
+      transform: translateY(-50%);
+      padding: 0 15px;
+    }
+
+    .prev { left: 10px; }
+    .next { right: 10px; }
+
+    @media (max-width: 480px) {
+      #galeria-container img { width: 140px; height: 100px; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Galeria Baco BJJ</h1>
+
+  <div id="galeria-container"></div>
+  <button onclick="window.history.back()">Voltar</button>
+
+  <!-- Lightbox -->
+  <div id="lightbox">
+    <span class="nav prev">&#10094;</span>
+    <img src="" />
+    <span class="nav next">&#10095;</span>
+  </div>
+
+  <!-- Script da galeria -->
+  <script>
+    let fotosGaleria = [];
+    let lightboxIndex = 0;
+
+    async function carregarGaleria() {
+      try {
+        const resp = await fetch('fotos.json', {cache: "no-store"});
+        if(!resp.ok) throw new Error('Não foi possível carregar fotos.json');
+        const data = await resp.json();
+        if(!Array.isArray(data)) throw new Error('Formato inválido no JSON');
+        fotosGaleria = data.map(f => 'photos/' + f); // adiciona a pasta
+        exibirGaleria();
+      } catch(e) {
+        console.error(e);
+        document.getElementById('galeria-container').innerHTML = '<p>Erro ao carregar a galeria.</p>';
+      }
+    }
+
+    function exibirGaleria() {
+      const container = document.getElementById('galeria-container');
+      container.innerHTML = '';
+      fotosGaleria.forEach((src,i) => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.dataset.index = i;
+        img.addEventListener('click', ()=>abrirLightbox(i));
+        container.appendChild(img);
+      });
+    }
+
+    function abrirLightbox(index) {
+      lightboxIndex = index;
+      const lb = document.getElementById('lightbox');
+      lb.querySelector('img').src = fotosGaleria[index];
+      lb.style.display = 'flex';
+    }
+
+    function navegar(dir) {
+      lightboxIndex = (lightboxIndex + dir + fotosGaleria.length) % fotosGaleria.length;
+      document.querySelector('#lightbox img').src = fotosGaleria[lightboxIndex];
+    }
+
+    document.getElementById('lightbox').addEventListener('click', e => {
+      if(e.target.id === 'lightbox') e.target.style.display = 'none';
+    });
+
+    document.querySelector('.prev').addEventListener('click', ()=>navegar(-1));
+    document.querySelector('.next').addEventListener('click', ()=>navegar(1));
+
+    window.addEventListener('DOMContentLoaded', carregarGaleria);
+  </script>
+
+</body>
+</html>
